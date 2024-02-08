@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Big At Heart Admin Portal</title>
+  <!-- Include jQuery first -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <!-- Other styles and head content -->
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      padding-top: 125px;
+    }
+
+    .container-fluid {
+      margin-top: 0px; /* Adjust the margin as needed */
+    }
+
+    .create-workshop-form {
+      width: 50%;
+      margin: 0 auto;
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+
+    .create-workshop-form h3 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+    }
+
+    .selected-tags {
+      margin-top: 10px;
+    }
+
+    .selected-tag {
+      background-color: #007bff;
+      color: white;
+      border: 1px solid #0069d9;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-top: 20px; /* Increase margin-top as needed */
+      margin-bottom: 10px; /* Add margin-bottom for separation */
+    }
+
+    .btn-primary {
+      margin-top: 10px; /* Increase margin-top as needed */
+      background-color: #007bff;
+      border: none;
+      padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .top-left-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .top-left-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  </head>
+  <body>
+
+  <button class="top-left-button" onclick="loadHomePage()">Back</button>
+
+
+  <div class="create-workshop-form">
+    <h3>Create New Workshop</h3>
+    <form id="workshopForm">
+      <div class="form-group">
+        <label for="workshopName">Workshop Name:</label>
+        <input type="text" class="form-control" id="workshopName" required>
+      </div>
+      <div class="form-group">
+        <label for="workshopDescription">Workshop Description:</label>
+        <textarea class="form-control" id="workshopDescription" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="workshopLocation">Workshop Location:</label>
+        <input type="text" class="form-control" id="workshopLocation" required>
+      </div>
+      <!-- <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="minVolunteerHours">Min Volunteer Hours:</label>
+          <input type="number" class="form-control" id="minVolunteerHours" min="1" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="maxVolunteerHours">Max Volunteer Hours:</label>
+          <input type="number" class="form-control" id="maxVolunteerHours" required>
+        </div>
+      </div> -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="workshopDate">Workshop Date:</label>
+          <input type="date" class="form-control" id="workshopDate" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="workshopStart">Start Time:</label>
+            <input type="time" id="workshopStart" name="workshopStart" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="workshopEnd">End Time:</label>
+            <input type="time" id="workshopEnd" name="workshopEnd" required>
+          </div>
+      </div>
+
+      <div class="form-group">
+        <label for="workshopCapacity">Workshop Capacity:</label>
+        <input type="number" class="form-control" id="workshopCapacity" min="1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="workshopTag">Workshop Tags:</label>
+        <select id="workshopTag" class="form-control" multiple="multiple" required>
+        </select>
+      </div>
+
+      <!-- Display selected tags here -->
+      <div class="selected-tags" id="selectedTagsContainer"></div>
+
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    // For Workshop Tag Selection
+    $(document).ready(function () {
+      var workshopTagDropdown = $('#workshopTag');
+
+      // Call getAllEventTags and populate the dropdown
+      google.script.run.withSuccessHandler(function (workshopTags) {
+        workshopTags.forEach(function (tag) {
+          var option = $('<option></option>').attr('value', tag).text(tag);
+          workshopTagDropdown.append(option);
+        });
+      }).getAllEventTags();
+
+      // Event listener for changes in the selected tags
+      workshopTagDropdown.on('change', function () {
+        var selectedTags = workshopTagDropdown.val();
+        var selectedTagsContainer = $('#selectedTagsContainer');
+        selectedTagsContainer.empty();
+
+        if (selectedTags && selectedTags.length > 0) {
+          selectedTags.forEach(function (tag) {
+            var tagElement = $('<span class="selected-tag"></span>').text(tag);
+            selectedTagsContainer.append(tagElement);
+          });
+        }
+      });
+    });
+
+    // // Add input validation for maxVolunteerHours
+    // $('#maxVolunteerHours').on('input', function () {
+    //   var minVolunteerHours = $('#minVolunteerHours').val();
+    //   var maxVolunteerHours = $(this).val();
+
+    //   if (maxVolunteerHours < minVolunteerHours) {
+    //     $(this).get(0).setCustomValidity('Max Volunteer Hours must be greater than or equal to Min Volunteer Hours.');
+    //   } else {
+    //     $(this).get(0).setCustomValidity('');
+    //   }
+    // });
+
+    // Validate the form before submission
+    $('#workshopForm').submit(function (workshop) {
+      workshop.preventDefault();
+
+      // Validate the form
+      if (validateCreateWorkshopForm()) {
+
+        // Get form data and handle the submission
+        var formData = {
+          workshopName: $('#workshopName').val(),
+          workshopDescription: $('#workshopDescription').val(),
+          workshopLocation: $('#workshopLocation').val(),
+          workshopDate: $('#workshopDate').val(),
+          workshopStart: $('#workshopStart').val(),
+          workshopEnd: $('#workshopEnd').val(),
+          workshopTag: $('#workshopTag').val(),
+          workshopCapacity: $('#workshopCapacity').val(),
+        };
+
+        console.log("SENDING TO SERVER****");
+        console.log(formData);
+
+        google.script.run
+          .withSuccessHandler(function () {
+            // Reset form fields
+            $('#workshopForm')[0].reset();
+            // Clear selected tags display
+            $('#selectedTagsContainer').empty();
+            alert("Successfully created Workshop!");
+            loadHomePage();
+          })
+          .withFailureHandler(function (error) {
+            console.error("Error in createNewWorkshop:", error);
+            alert("Failed to create workshop. Please try again.");
+
+          })
+          .createNewWorkshop(formData);
+      }
+    });
+
+    // Function to validate the entire form
+    function validateCreateWorkshopForm() {
+      var isValid = true;
+
+      // Validate Workshop Name
+      var workshopName = $('#workshopName').val().trim();
+      if (!workshopName) {
+        isValid = false;
+        alert('Workshop Name is required.');
+      }
+
+      // Validate Workshop Description
+      var workshopDescription = $('#workshopDescription').val().trim();
+      if (!workshopDescription) {
+        isValid = false;
+        alert('Workshop Description is required.');
+      }
+
+      // Validate Workshop Location
+      var workshopLocation = $('#workshopLocation').val().trim();
+      if (!workshopLocation) {
+        isValid = false;
+        alert('Workshop Location is required.');
+      }
+
+      // Validate Workshop Capacity
+      var workshopCapacity = parseInt($('#workshopCapacity').val());
+      if (workshopCapacity < 1 || isNaN(workshopCapacity)) {
+        isValid = false;
+        alert('Workshop Capacity must be an integer greater than or equal to 1.');
+      }
+
+      // Validate Workshop Date
+      var workshopDate = new Date($('#workshopDate').val());
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (workshopDate <= today) {
+        isValid = false;
+        alert('Workshop Date must be a future date.');
+      }
+
+      // Validate Workshop Start and End Time
+      var workshopStartTime = $('#workshopStart').val();
+      var workshopEndTime = $('#workshopEnd').val();
+      if (workshopStartTime >= workshopEndTime) {
+        isValid = false;
+        alert('Start Time must be before End Time.');
+      }
+      return isValid;
+    }
+
+    // function formatDate(dateString) {
+    //   var date = new Date(dateString);
+      
+    //   var day = String(date.getDate()).padStart(2, '0');
+    //   var month = String(date.getMonth() + 1).padStart(2, '0');
+    //   var year = date.getFullYear();
+      
+    //   var hours = String(date.getHours()).padStart(2, '0');
+    //   var minutes = String(date.getMinutes()).padStart(2, '0');
+    //   var seconds = String(date.getSeconds()).padStart(2, '0');
+      
+    //   var formattedDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+    //   return formattedDate;
+    // }
+
+    function loadHomePage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadHomePage();
+    }
+  </script>
+  </body>
+</html>

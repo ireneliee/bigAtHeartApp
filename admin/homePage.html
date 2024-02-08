@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Big At Heart Admin Portal</title>
+  <!-- Include jQuery first -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+  <!-- Include Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+  <!-- Other styles and head content -->
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      padding-top: 125px;
+    }
+
+    .navbar-brand {
+      font-size: 1.5rem;
+    }
+
+    .company-name {
+      font-size: 2rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 10px;
+      margin-top: 10px;
+      background-color: white;
+    }
+
+    .navbar-nav {
+      margin: auto;
+    }
+
+    .navbar-nav .nav-item {
+      margin: 0 12px;
+    }
+
+    .container-fluid {
+      margin-top: 0px; /* Adjust the margin as needed */
+    }
+
+    .create-event-form {
+      width: 50%;
+      margin: 0 auto;
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .create-event-form h3 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+    }
+
+    .selected-tags {
+      margin-top: 10px;
+    }
+
+    .selected-tag {
+      background-color: #007bff;
+      color: white;
+      border: 1px solid #0069d9;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-top: 20px; /* Increase margin-top as needed */
+      margin-bottom: 10px; /* Add margin-bottom for separation */
+    }
+
+    .btn-primary {
+      margin-top: 10px; /* Increase margin-top as needed */
+      background-color: #007bff;
+      border: none;
+      padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .filler-section {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .filler-section h3 {
+      color: #007bff;
+    }
+
+    .filler-section p {
+      color: #333;
+    }
+
+    .filler-section p.lead {
+      font-size: 1.2rem;
+    }
+
+    .filler-section p.subtext {
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="fixed-top bg-dark">
+    <div class="container-fluid company-name">
+      <h1>Big At Heart Admin Portal</h1>
+    </div>
+
+    <!-- Main Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" onclick="showTab('homeTab')">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="showTab('volunteersTab')">Volunteers</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="showTab('eventsTab')">Events</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="showTab('workshopsTab')">Workshops</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" onclick="showTab('trainingsTab')">Trainings</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link"  onclick="loadReportPage()">Report</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Content Section for Tabs -->
+  <div class="container-fluid">
+    <div class="tab-content">
+      <div class="tab-pane fade show active" id="homeTab">
+        <div class="filler-section">
+          <h3>Welcome to Big At Heart Admin Portal</h3>
+          <p class="lead">Manage your volunteering activities with ease.</p>
+          <p class="subtext">This platform provides tools to organize volunteers, events, workshops, and trainings effectively.</p>
+        </div>
+
+        <div class="filler-section">
+          <h3>About Us</h3>
+          <p class="lead">Big At Heart is dedicated to making a difference.</p>
+          <p>Our mission is to connect passionate individuals with meaningful volunteering opportunities, creating a positive impact in our communities.</p>
+        </div>
+
+        <div class="filler-section">
+          <h3>Contact Information</h3>
+          <p class="lead">Get in touch with us.</p>
+          <p>Email: info@bigatheart.org</p>
+          <p>Phone: +1 (123) 456-7890</p>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="volunteersTab">
+        <h3>Volunteers</h3>
+
+        <div id="page-body">
+          <div id="volunteerContainerList">
+
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="openModalBtn">Attendance</button>
+
+
+          <div class="modal" tabindex="-1" role="dialog" id="myModal">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Select an event</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="eventsList">Loading events...</div>
+                    </div>
+                    <div id="volunteersList">
+                      <!-- Dynamically populated -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+      </div>
+
+      <div class="tab-pane fade" id="eventsTab">
+        <h3>Events</h3>
+        <button style = "margin-bottom: 2rem;" class="btn btn-primary" onclick="loadCreateEventPage()">Create New Event</button>
+        <br/>
+
+          <div id="page-body">
+            <div id="eventContainerList">
+
+            </div>
+          </div>
+      </div>
+
+      <div class="tab-pane fade" id="workshopsTab">
+        <h3>Workshop</h3>
+        <button class="btn btn-primary" onclick="loadCreateWorkshopPage()">Create New Workshop</button>
+
+          <div id="page-body">
+            <div id="workshopContainerList">
+
+            </div>
+          </div>
+      </div>
+
+      <div class="tab-pane fade" id="trainingsTab">
+        <h3>Training</h3>
+          <button class="btn btn-primary" onclick="loadCreateTrainingPage()">Create New Training</button>
+
+          <div id="page-body">
+            <div id="trainingContainerList">
+
+            </div>
+          </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    function showTab(tabId) {
+      // Activate the tab manually
+      $('.nav-link').removeClass('active');
+      $('a[onclick="showTab(\'' + tabId + '\')"]').addClass('active');
+
+      // Hide all tabs
+      $('.tab-pane').removeClass('show active');
+      // Show the selected tab
+      $('#' + tabId).addClass('show active');
+    }
+
+    function loadReportPage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadReportPage();
+    }
+
+
+    function loadCreateEventPage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadCreateEventPage();
+    }
+
+    function loadCreateWorkshopPage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadCreateWorkshopPage();
+    }
+
+    function loadCreateTrainingPage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadCreateTrainingPage();
+    }
+
+      google.script.run.withSuccessHandler(function(events) {
+      var html = "";
+      for (let event of events) {
+        var badgeHtml = "";
+        for (let tag of event.tags) {
+          badgeHtml += '<span class="badge text-bg-success">' + tag + '</span>'
+        }
+        html += '<div class="card">';
+        html += '<div class="card-body">';
+        html += '<h3 class="card-title">' + event.name + '</h3>';
+        html += badgeHtml;
+        html += '<br/>';
+        html += '<br/>';
+        html += '<h5 class="card-text">' + event.location + '</h5>';
+        html += '<p class="card-text event-time">' + event.start + ' - ' + event.end + '</p>';
+        html += '<p class="card-text">' + event.description + '</p>';
+        html += '</div></div>';
+      };
+      document.getElementById("eventContainerList").innerHTML = html;
+    }).retrieveAllEvents();
+
+<!-- display workshops -->
+
+    google.script.run.withSuccessHandler(function(workshops) {
+      var html = "";
+      for (let workshop of workshops) {
+        var badgeHtml = "";
+        for (let tag of workshop.tags) {
+          badgeHtml += '<span class="badge text-bg-success">' + tag + '</span>'
+        }
+        html += '<div class="card">';
+        html += '<div class="card-body">';
+        html += '<h3 class="card-title">' + workshop.name + '</h3>';
+        html += badgeHtml;
+        html += '<br/>';
+        html += '<br/>';
+        html += '<h5 class="card-text">' + workshop.location + '</h5>';
+        html += '<p class="card-text event-time">' + workshop.start + ' - ' + workshop.end + '</p>';
+        html += '<p class="card-text">' + workshop.description + '</p>';
+        html += '</div></div>';
+      };
+      document.getElementById("workshopContainerList").innerHTML = html;
+    }).retrieveAllWorkshops();
+
+<!-- display trainings -->
+    google.script.run.withSuccessHandler(function(trainings) {
+      var html = "";
+      for (let training of trainings) {
+        var badgeHtml = "";
+        for (let tag of training.tags) {
+          badgeHtml += '<span class="badge text-bg-success">' + tag + '</span>'
+        }
+        html += '<div class="card">';
+        html += '<div class="card-body">';
+        html += '<h3 class="card-title">' + training.name + '</h3>';
+        html += badgeHtml;
+        html += '<br/>';
+        html += '<br/>';
+        html += '<h5 class="card-text">' + training.location + '</h5>';
+        html += '<p class="card-text event-time">' + training.start + ' - ' + training.end + '</p>';
+        html += '<p class="card-text">' + training.description + '</p>';
+        html += '</div></div>';
+      };
+      document.getElementById("trainingContainerList").innerHTML = html;
+    }).retrieveAllTrainings();
+
+    document.getElementById('openModalBtn').addEventListener('click', function() {
+        $('#myModal').modal('show');
+    });
+
+    function showVolunteers(eventId) {
+      google.script.run.withSuccessHandler(function(volunteers) {
+          var volunteersListHtml = volunteers.map(function(volunteer) {
+            if (volunteer.attended === 'Yes') {
+              return `<span id="attendance-status-${volunteer.email}">${volunteer.email} - ${volunteer.attended}</span>`;
+            } else {
+              return `<div id="attendance-status-${volunteer.email}">
+                <span>${volunteer.email} - ${volunteer.attended}</span>
+                <button ${volunteer.attended === 'Yes' ? 'disabled' : ''}  onclick="markAttendanceClientSide('${volunteer.eventId}', '${volunteer.email}')">Mark Attendance</button>
+                <br/>
+              </div>`;
+            }
+          }).join('');
+          document.getElementById('volunteersList').innerHTML = volunteersListHtml;
+      }).getVolunteersForEvent(eventId);
+    }
+
+    // google.script.run.withSuccessHandler(function(events) {
+    //   var html = "";
+    //   for (let event of events) {
+    //     var badgeHtml = "";
+    //     for (let tag of event.tags) {
+    //       badgeHtml += '<span class="badge text-bg-success">' + tag + '</span>'
+    //     }
+    //     html += '<div class="card">';
+    //     html += '<div class="card-body">';
+    //     html += '<h3 class="card-title">' + event.name + '</h3>';
+    //     html += badgeHtml;
+    //     html += '<br/>';
+    //     html += '<br/>';
+    //     html += '<h5 class="card-text">' + event.location + '</h5>';
+    //     html += '<p class="card-text event-time">' + event.start + ' - ' + event.end + '</p>';
+    //     html += '<p class="card-text">' + event.description + '</p>';
+    //     html += '<a onclick = "editEvent(' + event.id + ')" href="#' + event.id + '" class="btn btn-primary">Edit Event</a>';
+    //     html += '<a onclick = "viewVolunteers(' + event.id + ')" href="#' + event.id + '" class="btn btn-primary">View Volunteers</a>';
+    //     html += '</div></div>';
+    //   };
+    //   document.getElementById("workshopContainerList").innerHTML = html;
+    // }).retrieveAllWorkshops();
+
+    google.script.run.withSuccessHandler(function(events) {
+          console.log(events)
+          var eventsListHtml = events.map(function(event) {
+              return `<div class="event" onclick="showVolunteers('${event.id}')">
+                        <ul>
+                          <h5>${event.name}</h5>
+                        </ul>
+                    </div>`;
+          }).join('');
+          document.getElementById('eventsList').innerHTML = eventsListHtml;
+      }).retrieveAllEvents();
+
+    google.script.run.withSuccessHandler(function(volunteers) {
+      try {
+        var html = "";
+        for (let vol of volunteers) {
+          var badgeHtml = "";
+          for (let tag of vol.skills) {
+            badgeHtml += '<span style = "margin: 3px;" class="badge text-bg-success">' + tag + '</span>'
+          }
+          html += '<div class="card">';
+          html += '<div class="card-body">';
+          html += '<h3 class="card-title">' + vol.firstName + " " + vol.lastName +  '</h3>';
+          html += badgeHtml;
+          html += '<br/>'
+          html += '<p class="card-text">Age: ' + vol.age + ' years old </p>';
+          html += '<p class="card-text">Email: ' + vol.email + '</p>';
+          // html += '<p class="card-text event-time">' + event.start + ' - ' + event.end + '</p>';
+          // html += '<p class="card-text">' + event.description + '</p>';
+          // html += '<a onclick = "editEvent(' + event.id + ')" href="#' + event.id + '" class="btn btn-primary">Edit Event</a>';
+          // html += '<a onclick = "view(' + vol.volunteerId + ')" href="#' + vol.volunteerId + '" class="btn btn-primary">View</a>';
+          html += '</div></div>';
+        
+      };
+      } catch(error) {
+        alert(error);
+      }
+      document.getElementById("volunteerContainerList").innerHTML = html;
+      
+    }).getAllVolunteers();
+
+    function editEvent(eventId) {
+      // google.script.run.withSuccessHandler(function(interests) {
+      //   alert('Reservation is succesful.');
+      // })
+      // .withFailureHandler(function(error) {
+      //   alert('An error occurred while submitting the form: ' + error);
+      // })
+      // .reserveEvent(eventId);
+    }
+
+    function viewVolunteers(eventId) {
+      // google.script.run.withSuccessHandler(function(interests) {
+      //   alert('Reservation is succesful.');
+      // })
+      // .withFailureHandler(function(error) {
+      //   alert('An error occurred while submitting the form: ' + error);
+      // })
+      // .reserveEvent(eventId);
+    }
+
+    function openBootstrapModal() {
+        var template = HtmlService.createTemplateFromFile('ModalDialog');
+        template.eventsData = getEventsData(); 
+        var html = template.evaluate()
+            .setWidth(400)
+            .setHeight(300);
+        SpreadsheetApp.getUi().showModalDialog(html, 'Events List');
+    }
+
+    function markAttendanceClientSide(eventId, email) {
+      google.script.run.withSuccessHandler(function() {
+          alert('Attendance marked successfully for ' + email);
+          document.getElementById('attendance-status-' + email).innerText = `${email} - Yes`;
+        })
+        .withFailureHandler(function(error) {
+          console.error('Error marking attendance: ' + error.message);
+          alert('Failed to mark attendance for ' + email);
+        })
+        .markAttendance(eventId, email); // This is the server-side function you'll call
+    }
+
+
+
+  </script>
+
+    
+</body>
+
+</html>

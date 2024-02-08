@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Big At Heart Admin Portal</title>
+  <!-- Include jQuery first -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <!-- Other styles and head content -->
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      padding-top: 125px;
+    }
+
+    .container-fluid {
+      margin-top: 0px; /* Adjust the margin as needed */
+    }
+
+    .create-event-form {
+      width: 50%;
+      margin: 0 auto;
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+
+    .create-event-form h3 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+    }
+
+    .selected-tags {
+      margin-top: 10px;
+    }
+
+    .selected-tag {
+      background-color: #007bff;
+      color: white;
+      border: 1px solid #0069d9;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-top: 20px; /* Increase margin-top as needed */
+      margin-bottom: 10px; /* Add margin-bottom for separation */
+    }
+
+    .btn-primary {
+      margin-top: 10px; /* Increase margin-top as needed */
+      background-color: #007bff;
+      border: none;
+      padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .top-left-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .top-left-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  </head>
+  <body>
+
+  <button class="top-left-button" onclick="loadHomePage()">Back</button>
+
+
+  <div class="create-event-form">
+    <h3>Create New Event</h3>
+    <form id="eventForm">
+      <div class="form-group">
+        <label for="eventName">Event Name:</label>
+        <input type="text" class="form-control" id="eventName" required>
+      </div>
+      <div class="form-group">
+        <label for="eventDescription">Event Description:</label>
+        <textarea class="form-control" id="eventDescription" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="eventLocation">Event Location:</label>
+        <input type="text" class="form-control" id="eventLocation" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="minVolunteerHours">Min Volunteer Hours:</label>
+          <input type="number" class="form-control" id="minVolunteerHours" min="1" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="maxVolunteerHours">Max Volunteer Hours:</label>
+          <input type="number" class="form-control" id="maxVolunteerHours" required>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <label for="eventStart">Start Date and Time:</label>
+          <input type="datetime-local" id="eventStart" name="eventStart" required>
+        </div>
+        <div class="form-group col-md-6">
+          <label for="eventEnd">End Date and Time:</label>
+          <input type="datetime-local" id="eventEnd" name="eventEnd" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="eventTag">Event Tags:</label>
+        <select id="eventTag" class="form-control" multiple="multiple" required>
+        </select>
+      </div>
+
+      <!-- Display selected tags here -->
+      <div class="selected-tags" id="selectedTagsContainer"></div>
+
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    // For Event Tag Selection
+    $(document).ready(function () {
+      var eventTagDropdown = $('#eventTag');
+
+      // Call getAllEventTags and populate the dropdown
+      google.script.run.withSuccessHandler(function (eventTags) {
+        eventTags.forEach(function (tag) {
+          var option = $('<option></option>').attr('value', tag).text(tag);
+          eventTagDropdown.append(option);
+        });
+      }).getAllEventTags();
+
+      // Event listener for changes in the selected tags
+      eventTagDropdown.on('change', function () {
+        var selectedTags = eventTagDropdown.val();
+        var selectedTagsContainer = $('#selectedTagsContainer');
+        selectedTagsContainer.empty();
+
+        if (selectedTags && selectedTags.length > 0) {
+          selectedTags.forEach(function (tag) {
+            var tagElement = $('<span class="selected-tag"></span>').text(tag);
+            selectedTagsContainer.append(tagElement);
+          });
+        }
+      });
+    });
+
+    // Add input validation for maxVolunteerHours
+    $('#maxVolunteerHours').on('input', function () {
+      var minVolunteerHours = $('#minVolunteerHours').val();
+      var maxVolunteerHours = $(this).val();
+
+      if (maxVolunteerHours < minVolunteerHours) {
+        $(this).get(0).setCustomValidity('Max Volunteer Hours must be greater than or equal to Min Volunteer Hours.');
+      } else {
+        $(this).get(0).setCustomValidity('');
+      }
+    });
+
+    // Validate the form before submission
+    $('#eventForm').submit(function (event) {
+      event.preventDefault();
+
+      // Validate the form
+      if (validateCreateEventForm()) {
+
+        // Get form data and handle the submission
+        var formData = {
+          eventName: $('#eventName').val(),
+          eventDescription: $('#eventDescription').val(),
+          eventLocation: $('#eventLocation').val(),
+          eventStart: formatDate($('#eventStart').val()),
+          eventEnd: formatDate($('#eventEnd').val()),
+          eventTag: $('#eventTag').val(),
+          minVolunteerHours: $('#minVolunteerHours').val(),
+          maxVolunteerHours: $('#maxVolunteerHours').val(),
+          currNumberOfVolunteers: 0,
+        };
+
+        console.log("SENDING TO SERVER****");
+        console.log(formData);
+
+        google.script.run
+          .withSuccessHandler(function () {
+            // Reset form fields
+            $('#eventForm')[0].reset();
+            // Clear selected tags display
+            $('#selectedTagsContainer').empty();
+            alert("Successfully created Event!");
+            loadHomePage();
+          })
+          .withFailureHandler(function (error) {
+            console.error("Error in createNewEvent:", error);
+            alert("Failed to create event. Please try again.");
+
+          })
+          .createNewEvent(formData);
+      }
+    });
+
+    // Function to validate the entire form
+    function validateCreateEventForm() {
+      var isValid = true;
+
+      // Validate Event Name
+      var eventName = $('#eventName').val().trim();
+      if (!eventName) {
+        isValid = false;
+        alert('Event Name is required.');
+      }
+
+      // Validate Event Description
+      var eventDescription = $('#eventDescription').val().trim();
+      if (!eventDescription) {
+        isValid = false;
+        alert('Event Description is required.');
+      }
+
+      // Validate Event Location
+      var eventLocation = $('#eventLocation').val().trim();
+      if (!eventLocation) {
+        isValid = false;
+        alert('Event Location is required.');
+      }
+
+      // Validate Start Date and End Date
+      var eventStart = new Date($('#eventStart').val());
+      var eventEnd = new Date($('#eventEnd').val());
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (eventStart >= eventEnd) {
+        isValid = false;
+        alert('Start Date must be before End Date.');
+      }
+
+      if (eventStart <= today) {
+        isValid = false;
+        alert('Start Date must be a future date.');
+      }
+
+      return isValid;
+    }
+
+    function formatDate(dateString) {
+      var date = new Date(dateString);
+      
+      var day = String(date.getDate()).padStart(2, '0');
+      var month = String(date.getMonth() + 1).padStart(2, '0');
+      var year = date.getFullYear();
+      
+      var hours = String(date.getHours()).padStart(2, '0');
+      var minutes = String(date.getMinutes()).padStart(2, '0');
+      var seconds = String(date.getSeconds()).padStart(2, '0');
+      
+      var formattedDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+      return formattedDate;
+    }
+
+    function loadHomePage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadHomePage();
+    }
+  </script>
+  </body>
+</html>

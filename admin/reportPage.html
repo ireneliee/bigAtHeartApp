@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Big at Heart Volunteer Portal Volunteer Portal</title>
+  <!-- Include Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+  <style>
+    .navbar-brand {
+      font-size: 1.5rem;
+    }
+
+    .navbar-nav {
+      margin: auto;
+    }
+
+    .navbar-nav .nav-item {
+      margin: 0 12px;
+    }
+
+    .container-fluid {
+      margin: 1rem;
+      /* Adjust the margin as needed */
+    }
+
+    #blogpost-title {
+      padding: 1rem;
+    }
+
+    .card {
+      margin: 2rem;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" onclick="loadHomePage()">Homepage</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" onclick="loadReportPage()">Report</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container-fluid" id="reportPageHeader">
+    <h3>Report Generator</h3>
+    <div id="reportNavBar">
+      <div class="btn-group" role="group" aria-label="Basic outlined example">
+        <button type="button" onclick = "loadAggregateReportPage()" class="btn btn-outline-primary">View aggregate report</button>
+      </div>
+      <div id="individualReportContainer" style="margin-top: 2rem">
+        <form id="userReportGeneratorForm">
+          <div class="form-group">
+            <label for = "userReportEmailInput" >Key in volunteer email</label>
+            <input type = "text" class="form-control" id = "userReportEmailInput" required/>
+          </div>
+          <button type="submit" style = "margin-top: 2rem;" class="btn btn-primary">Search</button>
+        </form>
+        <div class="container text-center" id="volunteerSearchResult">
+          <br/>
+          <h3 id="volunteerFullName"></h3>
+          <div class="row align-items-start">
+            <div class="card col">
+              <div class="card-body">
+                <img src="https://img.freepik.com/free-vector/time-management-concept_52683-63895.jpg" class="card-img-top" alt="...">
+                <p class="card-text">Has volunteered a total of</p>
+                <h2 id="volunteeringHours" class="card-text">0</h2>
+                <p class="card-text">Hours</p>
+              </div>
+            </div>
+            <div class="card col">
+              <div class="card-body">
+                <img src="https://img.freepik.com/free-vector/events-concept-illustration_114360-931.jpg" class="card-img-top" alt="...">
+                <p class="card-text">Has attended a total of</p>
+                <h2 id="volunteeringEvents" class="card-text">0</h2>
+                <p class="card-text">Volunteering events</p>
+              </div>
+            </div>
+            <div class="card col">
+              <div class="card-body">
+                <img src="https://img.freepik.com/premium-vector/coworking-concept-style-with-people-characters-situation_9209-3659.jpg?size=626&ext=jpg&ga=GA1.1.1826414947.1699228800&semt=ais" class="card-img-top" alt="...">
+                <p class="card-text">Has attended a total of</p>
+                <h2 id="volunteeringWorkshops" class="card-text">0</h2>
+                <p class="card-text">Workshops</p>
+              </div>
+            </div>
+            <div class="card col">
+              <div class="card-body">
+                <img src="https://img.freepik.com/free-vector/coach-speaking-before-audience-mentor-presenting-charts-reports-employees-meeting-business-training-seminar-conference-vector-illustration-presentation-lecture-education_74855-8294.jpg" class="card-img-top" alt="...">
+                <p class="card-text">Has attended a total of</p>
+                <h2 id="volunteeringTrainings" class="card-text">0</h2>
+                <p class="card-text">Trainings</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion" id="accordionExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+        Events
+      </button>
+            </h2>
+            <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div id="list-of-volunteering-events" class="accordion-body">
+
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+        Workshop
+      </button>
+            </h2>
+            <div id="collapseTwo" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div id="list-of-volunteering-workshops" class="accordion-body">
+
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+        Trainings
+      </button>
+            </h2>
+            <div id="collapseThree" class="accordion-collapse collapse show" data-bs-parent="#accordionExample">
+              <div id="list-of-volunteering-trainings" class="accordion-body">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <br/>
+
+  <!-- Include Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    // how many hours of volunteering
+    // how many events
+    // how many workshops
+    // how many trainings
+
+    // list of events attended
+    $(document).ready(function() {
+            $("#userReportGeneratorForm").submit(function(event) {
+                event.preventDefault(); 
+                var userEmail = $('#userReportEmailInput').val();
+                google.script.run
+                    .withSuccessHandler(function(response) {
+                        populateSearchResult(response);
+                      })
+                    .withFailureHandler(function(error) {
+                        alert('An error occurred while submitting the form. Please try again later: ' + error);
+                    })
+                    .retrieveVolunteeringHours(userEmail);
+                
+                populateOpportunitiesNo(userEmail);
+                loadEventList(userEmail);
+                loadWorkshopList(userEmail);
+                loadTrainingList(userEmail);
+              });
+    });
+    function populateSearchResult(userData) {
+      var nameElement = document.getElementById("volunteerFullName");
+      nameElement.innerHTML = userData.fullName;
+
+      var hoursElement = document.getElementById("volunteeringHours");
+      hoursElement.innerHTML = userData.volunteeringHours;
+    };
+
+    function populateOpportunitiesNo(userEmail) {
+      google.script.run
+                    .withSuccessHandler(function(response) {
+                        var eventNoElements = document.getElementById("volunteeringEvents");
+                        eventNoElements.innerHTML = response;
+                      })
+                    .retrieveNoOfVolunteeredEvents(userEmail);
+
+      google.script.run
+                    .withSuccessHandler(function(response) {
+                        var eventNoElements = document.getElementById("volunteeringWorkshops");
+                        eventNoElements.innerHTML = response;
+                      })
+                    .retrieveNoOfVolunteeredWorkshop(userEmail);
+      
+      google.script.run
+                    .withSuccessHandler(function(response) {
+                        var eventNoElements = document.getElementById("volunteeringTrainings");
+                        eventNoElements.innerHTML = response;
+                      })
+                    .retrieveNoOfVolunteeredTraining(userEmail);
+    }
+
+
+      function loadAggregateReportPage() {
+      google.script.run.withSuccessHandler(function(html) {
+                          document.open();
+                          document.write(html);
+                          document.close();
+                      }).loadAggregateReportPage();
+      }
+
+      function loadEventList(userEmail) {
+        google.script.run
+                    .withSuccessHandler(function(response) {
+                      var htmlContent = '<ul>';
+                      for(let event of response) {
+                        htmlContent += `<li>${event.eventName} (${formatDate(event.startTime)})</li>`
+                      }
+                      htmlContent += '</ul>'
+                      var element = document.getElementById("list-of-volunteering-events");
+                      element.innerHTML = htmlContent;
+                      })
+                    .withFailureHandler(function(error) {
+                      alert(error);
+                    })
+                    .retrieveEventsVolunteered(userEmail);
+      }
+                    
+      
+      function loadWorkshopList(userEmail) {
+        google.script.run
+                    .withSuccessHandler(function(response) {
+                      var htmlContent = '<ul>';
+                      for(let event of response) {
+                        htmlContent += `<li>${event.eventName} (${formatDate(event.startTime)})</li>`
+                      }
+                      htmlContent += '</ul>'
+                      var element = document.getElementById("list-of-volunteering-workshops");
+                      element.innerHTML = htmlContent;
+                      })
+                    .retrieveWorkshopsVolunteered(userEmail)
+      };
+      
+
+      function loadTrainingList(userEmail) {
+        google.script.run
+                    .withSuccessHandler(function(response) {
+                      var htmlContent = '<ul>';
+                      for(let event of response) {
+                        htmlContent += `<li>${event.eventName} (${formatDate(event.startTime)})</li>`
+                      }
+                      htmlContent += '</ul>'
+                      var element = document.getElementById("list-of-volunteering-trainings");
+                      element.innerHTML = htmlContent;
+                    })
+                    .retrieveTrainingsVolunteered(userEmail);
+      }
+
+
+      function formatDate(dateTimeString) {
+        var dateObject = new Date(dateTimeString);
+        var options = { month: 'short', day: '2-digit', year: 'numeric' };
+        var formattedDate = dateObject.toLocaleDateString('en-US', options);
+        return formattedDate;
+      }
+
+      function loadHomePage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadHomePage();
+    }
+
+
+  </script>
+
+
+</body>
+
+</html>

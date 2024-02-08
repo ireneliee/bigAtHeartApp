@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+
+<meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Big At Heart Admin Portal</title>
+  <!-- Include jQuery first -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+  <!-- Other styles and head content -->
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <style>
+    body {
+      padding-top: 125px;
+    }
+
+    .container-fluid {
+      margin-top: 0px; /* Adjust the margin as needed */
+    }
+
+    .create-training-form {
+      width: 50%;
+      margin: 0 auto;
+      background-color: #f8f9fa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 30px;
+    }
+
+    .create-training-form h3 {
+      text-align: center;
+      color: #007bff;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-control {
+      border-radius: 5px;
+    }
+
+    .selected-tags {
+      margin-top: 10px;
+    }
+
+    .selected-tag {
+      background-color: #007bff;
+      color: white;
+      border: 1px solid #0069d9;
+      border-radius: 5px;
+      padding: 5px 10px;
+      margin-right: 5px;
+      margin-top: 20px; /* Increase margin-top as needed */
+      margin-bottom: 10px; /* Add margin-bottom for separation */
+    }
+
+    .btn-primary {
+      margin-top: 10px; /* Increase margin-top as needed */
+      background-color: #007bff;
+      border: none;
+      padding: 10px 20px;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+    }
+
+    .top-left-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .top-left-button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+  </head>
+  <body>
+
+  <button class="top-left-button" onclick="loadHomePage()">Back</button>
+
+
+  <div class="create-training-form">
+    <h3>Create New Training</h3>
+    <form id="trainingForm">
+      <div class="form-group">
+        <label for="trainingName">Training Name:</label>
+        <input type="text" class="form-control" id="trainingName" required>
+      </div>
+      <div class="form-group">
+        <label for="trainingDescription">Training Description:</label>
+        <textarea class="form-control" id="trainingDescription" rows="3" required></textarea>
+      </div>
+      <div class="form-group">
+        <label for="trainingLocation">Training Location:</label>
+        <input type="text" class="form-control" id="trainingLocation" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="trainingDate">Training Date:</label>
+          <input type="date" class="form-control" id="trainingDate" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-6">
+            <label for="trainingStart">Start Time:</label>
+            <input type="time" id="trainingStart" name="trainingStart" required>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="trainingEnd">End Time:</label>
+            <input type="time" id="trainingEnd" name="trainingEnd" required>
+          </div>
+      </div>
+
+      <div class="form-group">
+        <label for="trainingCapacity">Training Capacity:</label>
+        <input type="number" class="form-control" id="trainingCapacity" min="1" required>
+      </div>
+
+      <div class="form-group">
+        <label for="trainingTag">Training Tags:</label>
+        <select id="trainingTag" class="form-control" multiple="multiple" required>
+        </select>
+      </div>
+
+      <!-- Display selected tags here -->
+      <div class="selected-tags" id="selectedTagsContainer"></div>
+
+      <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+  </div>
+
+  <!-- Include Bootstrap JS after jQuery -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+  <script>
+    // For Training Tag Selection
+    $(document).ready(function () {
+      var trainingTagDropdown = $('#trainingTag');
+
+      // Call getAllEventTags and populate the dropdown
+      google.script.run.withSuccessHandler(function (trainingTags) {
+        trainingTags.forEach(function (tag) {
+          var option = $('<option></option>').attr('value', tag).text(tag);
+          trainingTagDropdown.append(option);
+        });
+      }).getAllEventTags();
+
+      // Training listener for changes in the selected tags
+      trainingTagDropdown.on('change', function () {
+        var selectedTags = trainingTagDropdown.val();
+        var selectedTagsContainer = $('#selectedTagsContainer');
+        selectedTagsContainer.empty();
+
+        if (selectedTags && selectedTags.length > 0) {
+          selectedTags.forEach(function (tag) {
+            var tagElement = $('<span class="selected-tag"></span>').text(tag);
+            selectedTagsContainer.append(tagElement);
+          });
+        }
+      });
+    });
+
+    // // Add input validation for maxVolunteerHours
+    // $('#maxVolunteerHours').on('input', function () {
+    //   var minVolunteerHours = $('#minVolunteerHours').val();
+    //   var maxVolunteerHours = $(this).val();
+
+    //   if (maxVolunteerHours < minVolunteerHours) {
+    //     $(this).get(0).setCustomValidity('Max Volunteer Hours must be greater than or equal to Min Volunteer Hours.');
+    //   } else {
+    //     $(this).get(0).setCustomValidity('');
+    //   }
+    // });
+
+    // Validate the form before submission
+    $('#trainingForm').submit(function (training) {
+      training.preventDefault();
+
+      // Validate the form
+      if (validateCreateTrainingForm()) {
+
+        // Get form data and handle the submission
+        var formData = {
+          trainingName: $('#trainingName').val(),
+          trainingDescription: $('#trainingDescription').val(),
+          trainingLocation: $('#trainingLocation').val(),
+          trainingDate: $('#trainingDate').val(),
+          trainingStart:$('#trainingStart').val(),
+          trainingEnd: $('#trainingEnd').val(),
+          trainingTag: $('#trainingTag').val(),
+          trainingCapacity: $('#trainingCapacity').val(),
+        };
+
+        console.log("SENDING TO SERVER****");
+        console.log(formData);
+
+        google.script.run
+          .withSuccessHandler(function () {
+            // Reset form fields
+            $('#trainingForm')[0].reset();
+            // Clear selected tags display
+            $('#selectedTagsContainer').empty();
+            alert("Successfully created Training!");
+            loadHomePage();
+          })
+          .withFailureHandler(function (error) {
+            console.error("Error in createNewTraining:", error);
+            alert("Failed to create training. Please try again.");
+
+          })
+          .createNewTraining(formData);
+      }
+    });
+
+    // Function to validate the entire form
+    function validateCreateTrainingForm() {
+      var isValid = true;
+
+      // Validate Training Name
+      var trainingName = $('#trainingName').val().trim();
+      if (!trainingName) {
+        isValid = false;
+        alert('Training Name is required.');
+      }
+
+      // Validate Training Description
+      var trainingDescription = $('#trainingDescription').val().trim();
+      if (!trainingDescription) {
+        isValid = false;
+        alert('Training Description is required.');
+      }
+
+      // Validate Training Location
+      var trainingLocation = $('#trainingLocation').val().trim();
+      if (!trainingLocation) {
+        isValid = false;
+        alert('Training Location is required.');
+      }
+
+      // Validate training Start and End Time
+      var trainingStartTime = $('#trainingStart').val();
+      var trainingEndTime = $('#trainingEnd').val();
+      if (trainingStartTime >= trainingEndTime) {
+        isValid = false;
+        alert('Start Time must be before End Time.');
+      }
+
+      // Validate training Capacity
+      var trainingCapacity = parseInt($('#trainingCapacity').val());
+      if (trainingCapacity < 1 || isNaN(trainingCapacity)) {
+        isValid = false;
+        alert('Training Capacity must be an integer greater than or equal to 1.');
+      }
+
+      return isValid;
+    }
+
+    // function formatDate(dateString) {
+    //   var date = new Date(dateString);
+      
+    //   var day = String(date.getDate()).padStart(2, '0');
+    //   var month = String(date.getMonth() + 1).padStart(2, '0');
+    //   var year = date.getFullYear();
+      
+    //   var hours = String(date.getHours()).padStart(2, '0');
+    //   var minutes = String(date.getMinutes()).padStart(2, '0');
+    //   var seconds = String(date.getSeconds()).padStart(2, '0');
+      
+    //   var formattedDate = day + '/' + month + '/' + year + ' ' + hours + ':' + minutes + ':' + seconds;
+    //   return formattedDate;
+    // }
+
+    function loadHomePage() {
+      google.script.run.withSuccessHandler(function(html) {
+        document.open();
+        document.write(html);
+        document.close();
+      }).loadHomePage();
+    }
+  </script>
+  </body>
+</html>
